@@ -9,6 +9,15 @@ export const addUser = async (user: User): Promise<UserWithId> => {
     return transformUserIns(userIns);
 }
 
+export const findUserByEmail = async (email:string):Promise<UserWithId> => {
+    const userIns: any = await UserModel.findOne({
+        where:{
+            email:email
+        }
+    });
+    return transformUserIns(userIns);
+}
+
 export const findUserById = async (id:number):Promise<UserWithId> => {
     const userIns: any = await UserModel.findById(id);
     return transformUserIns(userIns);
@@ -35,7 +44,11 @@ export const getUserList = async (): Promise<UserWithId[]> => {
     return userInses.map(userIns => transformUserIns(userIns));
 }
 
-export const auth = async (id:number, password:string):Promise<boolean> => {
-    const userIns: any = await UserModel.findById(id);
+export const auth = async (email:string, password:string):Promise<boolean> => {
+    const userIns: any = await UserModel.findOne({
+        where:{
+            email:email
+        }
+    });
     return userIns.get("password") === password;
 }

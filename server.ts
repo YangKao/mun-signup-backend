@@ -68,8 +68,8 @@ router.delete('/user/:id', async (ctx, next) => {
 
 //TODO: Handle Wrong Password
 router.post('/auth', async (ctx, next) => {
-    const req: { id: number, password: string } = ctx.request.body;
-    const token = await auth.generateToken(req.id, req.password);
+    const req: { email: string, password: string } = ctx.request.body;
+    const token = await auth.generateToken(req.email, req.password);
     if (token) {
         ctx.body = {
             token: token

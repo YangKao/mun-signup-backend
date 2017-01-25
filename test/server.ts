@@ -72,7 +72,7 @@ describe("#server", () => {
             },
             method:"POST",
             body: JSON.stringify({
-                id:1,
+                email:"test1@test.com",
                 password:"wrongpassword"
             })
         })
@@ -88,7 +88,7 @@ describe("#server", () => {
             },
             method:"POST",
             body: JSON.stringify({
-                id:1,
+                email:"test1@test.com",
                 password:"testpassword"
             })
         })

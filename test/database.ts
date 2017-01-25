@@ -48,9 +48,9 @@ describe("Database", () => {
         should(user.email).equal("test3@test.com");
     })
 
-    it("#auth for user (id=2 password=\"testpassword\")", async () => {
-        should(await database.auth(2,"testpassword")).equal(true);
-        should(await database.auth(2,"wrongpassword")).equal(false);
+    it("#auth for user (email=\"test2@test.com\" password=\"testpassword\")", async () => {
+        should(await database.auth("test2@test.com","testpassword")).equal(true);
+        should(await database.auth("test2@test.com","wrongpassword")).equal(false);
     })
 
     it("#get all users", async () => {
@@ -62,6 +62,11 @@ describe("Database", () => {
     it("#get user (id=1)", async () => {
         const user = await database.findUserById(1);
         should(user.email).equal("test3@test.com");
+    })
+
+    it("#get user (email=\"test3@test.com\")", async () => {
+        const user = await database.findUserByEmail("test3@test.com");
+        should(user.id).equal(1);
     })
 
     it("#delete an user by Id (2)", async () => {
