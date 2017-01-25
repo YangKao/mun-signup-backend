@@ -1,5 +1,8 @@
 export const config = {
   prefix: "/api",
+  secret: "123456",
+  expire: 3600, //以秒计
+  adminPassword: "123456",
   database: {
     username: "root",
     password: "123456",

@@ -17,6 +17,7 @@ const connection = mysql.createConnection({
 app.listen(3000);
 
 describe("#server", () => {
+    let token:string = "";
     it("#add two user", async () => {
         await database.init();
         const raw1 = await fetch("http://localhost:3000/user", {
@@ -63,7 +64,40 @@ describe("#server", () => {
         should(user2.id).equal(2);
     })
 
-    it("#modify an user (id:1) email to test3@test.com", async () => {
+    it("#auth wrong password", async () => {
+        const raw = await fetch("http://localhost:3000/auth", {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method:"POST",
+            body: JSON.stringify({
+                id:1,
+                password:"wrongpassword"
+            })
+        })
+        const req = await raw.json();
+        should(req.err).equal("Wrong Password");
+    })
+
+    it("#auth true user (id:1 password:\"testpassword\")", async () => {
+        const raw = await fetch("http://localhost:3000/auth", {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method:"POST",
+            body: JSON.stringify({
+                id:1,
+                password:"testpassword"
+            })
+        })
+        const req = await raw.json();
+        should(req).not.have.keys('err');
+        token = req.token;
+    })
+
+    it("#modify an user (id:1) email to test3@test.com Without Auth", async () => {
         const raw = await fetch("http://localhost:3000/user/1", {
             headers: {
                 'Accept': 'application/json',
@@ -75,23 +109,26 @@ describe("#server", () => {
             })
         });
         const user = await raw.json();
+        should(user).have.keys("err");
+    })
+
+    it("#modify an user (id:1) email to test3@test.com", async () => {
+        const raw = await fetch("http://localhost:3000/user/1", {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+            method: "POST",
+            body: JSON.stringify({
+                email: "test3@test.com"
+            })
+        });
+        const user = await raw.json();
         should(user.email).equal("test3@test.com");
     })
 
-    it("#get all users", async () => {
-        const raw = await fetch("http://localhost:3000/user/all", {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            method: "GET"
-        });
-        const users = await raw.json();
-        should(users[0].id).equal(1);
-        should(users[1].id).equal(2);
-    })
-
-    it("#get user (id=1)", async () => {
+    it("#get user (id=1) Without Auth", async () => {
         const raw = await fetch("http://localhost:3000/user/1", {
             headers: {
                 'Accept': 'application/json',
@@ -100,14 +137,66 @@ describe("#server", () => {
             method: "GET"
         });
         const user = await raw.json();
+        should(user).has.keys("err");
+    })
+
+    it("#get user (id=1)", async () => {
+        const raw = await fetch("http://localhost:3000/user/1", {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+            method: "GET"
+        });
+        const user = await raw.json();
         should(user.email).equal("test3@test.com");
+    })
+
+    it("#get all users Without Auth", async () => {
+        const raw = await fetch("http://localhost:3000/user/all", {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "GET"
+        });
+        const users = await raw.json();
+        should(users).has.keys("err");
+    })
+
+    it("#get all users", async () => {
+        const raw = await fetch("http://localhost:3000/user/all", {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': config.adminPassword
+            },
+            method: "GET"
+        });
+        const users = await raw.json();
+        should(users[0].id).equal(1);
+        should(users[1].id).equal(2);
+    })
+
+    it("#delete a user by Id (2) Without Auth", async () => {
+        const raw = await fetch("http://localhost:3000/user/2", {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "DELETE"
+        });
+        const user = await raw.json();
+        should(user).has.keys("err");
     })
 
     it("#delete a user by Id (2)", async () => {
         const raw = await fetch("http://localhost:3000/user/2", {
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': config.adminPassword
             },
             method: "DELETE"
         });
