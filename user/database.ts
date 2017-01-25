@@ -34,3 +34,8 @@ export const getUserList = async (): Promise<UserWithId[]> => {
     const userInses: any[] = await UserModel.findAll();
     return userInses.map(userIns => transformUserIns(userIns));
 }
+
+export const auth = async (id:number, password:string):Promise<boolean> => {
+    const userIns: any = await UserModel.findById(id);
+    return userIns.get("password") === password;
+}

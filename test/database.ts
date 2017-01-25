@@ -48,6 +48,11 @@ describe("Database", () => {
         should(user.email).equal("test3@test.com");
     })
 
+    it("#auth for user (id=2 password=\"testpassword\")", async () => {
+        should(await database.auth(2,"testpassword")).equal(true);
+        should(await database.auth(2,"wrongpassword")).equal(false);
+    })
+
     it("#get all users", async () => {
         const users = await database.getUserList();
         should(users.length).equal(2);
