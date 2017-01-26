@@ -1,8 +1,6 @@
-import { User, UserWithId, transformUserIns, UserModel } from './declare'
+import { User, UserWithId, transformUserIns, UserModel,init } from './declare'
 
-export const init = async (): Promise<void> => {
-    UserModel.sync();
-}
+export {init};
 
 export const addUser = async (user: User): Promise<UserWithId> => {
     const userIns: any = await UserModel.create(user);

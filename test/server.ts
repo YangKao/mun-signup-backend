@@ -55,13 +55,14 @@ describe("#server", () => {
                 name: "testname",
                 password: "testpassword",
                 idNum: "testIdNum",
-                school: "testSchool"
+                school: "测试中文学校"
             })
         });
         const user2 = await raw2.json();
 
         should(user1.id).equal(1);
         should(user2.id).equal(2);
+        should(user2.school).equal("测试中文学校");
     })
 
     it("#auth wrong password", async () => {

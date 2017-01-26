@@ -83,5 +83,6 @@ router.post('/auth', async (ctx, next) => {
 })
 
 app.use(bodyParser());
+app.use(require("koa-cors")());
 app.use(router.routes());
 app.use(router.allowedMethods());
