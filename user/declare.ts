@@ -1,4 +1,5 @@
 import * as Sequelize from "sequelize"
+import {logger} from "../logger"
 import { config } from "../config"
 
 /*
@@ -85,8 +86,8 @@ export const init = async () => {
 
 init().then((status) => {
     if(status){
-        console.log("Connect Well");
+        logger.info("Connect Well");
     } else {
-        console.log("Connect Failed");
+        logger.error("Connect Failed");
     }
 });

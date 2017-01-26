@@ -3,6 +3,7 @@ import * as Router from "koa-router"
 import * as database from "./user/database"
 import * as bodyParser from "koa-bodyparser"
 import * as auth from "./auth/auth"
+import { logger } from "./logger"
 import { config } from "./config"
 
 export const app = new Koa();
@@ -11,7 +12,12 @@ const router = new Router();
 router.put('/user', async (ctx, next) => {
     try {
         ctx.body = await database.addUser(ctx.request.body);
-    } catch(err) {
+        logger.info(`User (id=${ctx.body.id}) Sign Up`)
+    } catch (err) {
+        logger.error(JSON.stringify({
+            type: "Database Error",
+            content: err
+        }));
         ctx.body = {
             err: "Same Email"
         };
@@ -24,6 +30,7 @@ router.post('/user/:id', async (ctx, next) => {
     const token = ctx.request.headers["authorization"];
     if (await auth.verifyToken(id, token)) {
         ctx.body = await database.modUser(id, ctx.request.body);
+        logger.info(`User (id=${ctx.body.id}) Modified`)
     } else {
         ctx.body = {
             err: "Token Expired" //TODO: Handle More Error
@@ -35,7 +42,7 @@ router.post('/user/:id', async (ctx, next) => {
 
 router.get('/user/all', async (ctx, next) => {
     const token = ctx.request.headers["authorization"];
-    if(token === config.adminPassword) {
+    if (token === config.adminPassword) {
         ctx.body = await database.getUserList();
     } else {
         ctx.body = {
@@ -62,8 +69,9 @@ router.get('/user/:id', async (ctx, next) => {
 
 router.delete('/user/:id', async (ctx, next) => {
     const token = ctx.request.headers["authorization"];
-    if(token === config.adminPassword) {
+    if (token === config.adminPassword) {
         ctx.body = await database.deleteUserById(ctx.params["id"]);
+        logger.info(`Delete User (id=${ctx.body.id})`)
     } else {
         ctx.body = {
             err: "Wrong Admin Password"
@@ -80,10 +88,12 @@ router.post('/auth', async (ctx, next) => {
         ctx.body = {
             token: token
         }
+        logger.info(`User (email=${ctx.request.body.email}) Log In Successful`)
     } else {
         ctx.body = {
             err: "Wrong Password Or Email"
         }
+        logger.info(`User (email=${ctx.request.body.email}) Log In Failed`)
     }
     await next;
 })

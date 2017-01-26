@@ -21,6 +21,7 @@
     "@types/mysql": "0.0.31",
     "@types/sequelize": "^4.0.39",
     "@types/should": "^8.1.30",
+    "@types/winston": "^2.2.0",
     "isomorphic-fetch": "^2.2.1",
     "jsonwebtoken": "^7.2.1",
     "koa": "^2.0.0-alpha.7",
@@ -29,7 +30,8 @@
     "koa-router": "^7.0.1",
     "mysql": "^2.12.0",
     "sequelize": "^3.30.0",
-    "should": "^11.1.2"
+    "should": "^11.1.2",
+    "winston": "^2.3.1"
   },
   "devDependencies": {
     "mocha": "^3.2.0"

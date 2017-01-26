@@ -3,6 +3,7 @@ export const config = {
   secret: "ljiZwpF&IHhpp9@D",
   expire: 24*60*60, //以秒计
   adminPassword: "123456",
+  log: "serverLog.log",
   database: {
     username: "root",
     password: "123456",
