@@ -65,6 +65,50 @@ describe("#server", () => {
         should(user2.school).equal("测试中文学校");
     })
 
+    it("#add two same user", async () => {
+        await database.init();
+        const raw1 = await fetch("http://localhost:3000/user", {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "PUT",
+            body: JSON.stringify({
+                intendCom: 1,
+                eatingHabit: "testeatinghabit",
+                email: "test1@test.com",
+                myTel: "777",
+                emerTel: "111",
+                name: "testname",
+                password: "testpassword",
+                idNum: "testIdNum",
+                school: "testSchool"
+            })
+        });
+        const user1 = await raw1.json();
+
+        const raw2 = await fetch("http://localhost:3000/user", {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "PUT",
+            body: JSON.stringify({
+                intendCom: 1,
+                eatingHabit: "testeatinghabit",
+                email: "test2@test.com",
+                myTel: "777",
+                emerTel: "111",
+                name: "testname",
+                password: "testpassword",
+                idNum: "testIdNum",
+                school: "测试中文学校"
+            })
+        });
+        const user2 = await raw2.json();
+        should(user2).has.keys("err");
+    })
+
     it("#auth wrong password", async () => {
         const raw = await fetch("http://localhost:3000/auth", {
             headers: {
@@ -78,7 +122,23 @@ describe("#server", () => {
             })
         })
         const req = await raw.json();
-        should(req.err).equal("Wrong Password");
+        should(req.err).equal("Wrong Password Or Email");
+    })
+
+    it("#auth wrong email", async () => {
+        const raw = await fetch("http://localhost:3000/auth", {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method:"POST",
+            body: JSON.stringify({
+                email:"wrong@test.com",
+                password:"wrongpassword"
+            })
+        })
+        const req = await raw.json();
+        should(req.err).equal("Wrong Password Or Email");
     })
 
     it("#auth true user (id:1 password:\"testpassword\")", async () => {

@@ -1,22 +1,26 @@
-import { User, UserWithId, transformUserIns, UserModel,init } from './declare'
+import { User, UserWithId, transformUserIns, UserModel, init } from './declare'
 
-export {init};
+export { init };
+
+interface Error {
+    err: string
+}
 
 export const addUser = async (user: User): Promise<UserWithId> => {
     const userIns: any = await UserModel.create(user);
     return transformUserIns(userIns);
 }
 
-export const findUserByEmail = async (email:string):Promise<UserWithId> => {
+export const findUserByEmail = async (email: string): Promise<UserWithId> => {
     const userIns: any = await UserModel.findOne({
-        where:{
-            email:email
+        where: {
+            email: email
         }
     });
     return transformUserIns(userIns);
 }
 
-export const findUserById = async (id:number):Promise<UserWithId> => {
+export const findUserById = async (id: number): Promise<UserWithId> => {
     const userIns: any = await UserModel.findById(id);
     return transformUserIns(userIns);
 }
@@ -42,11 +46,14 @@ export const getUserList = async (): Promise<UserWithId[]> => {
     return userInses.map(userIns => transformUserIns(userIns));
 }
 
-export const auth = async (email:string, password:string):Promise<boolean> => {
+export const auth = async (email: string, password: string): Promise<boolean> => {
     const userIns: any = await UserModel.findOne({
-        where:{
-            email:email
+        where: {
+            email: email
         }
     });
-    return userIns.get("password") === password;
+    if (userIns)
+        return userIns.get("password") === password;
+    else
+        return false;
 }
