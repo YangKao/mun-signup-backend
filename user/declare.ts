@@ -57,6 +57,12 @@ export const transformUserIns = (ins): UserWithId => {
 const sequelize = new Sequelize(config.database.database, config.database.username, config.database.password, {
     host: config.database.address,
     port: config.database.port,
+    dialectOptions: {
+        charset: "utf8mb4",
+        collate: "utf8mb4_unicode_ci",
+        supportBigNumbers: true,
+        bigNumberStrings: true
+    },
     logging: false
 });
 export const UserModel = sequelize.define('user', {
@@ -65,10 +71,22 @@ export const UserModel = sequelize.define('user', {
     email: { type: Sequelize.STRING(128), validate: { isEmail: true }, unique: 'compositeIndex' },
     myTel: { type: Sequelize.STRING(128) },
     emerTel: { type: Sequelize.STRING(128) },
-    name: { type: Sequelize.STRING(128) },
+    name: { type: Sequelize.STRING },
     password: { type: Sequelize.STRING(128) },
     idNum: { type: Sequelize.STRING(128) },
     school: { type: Sequelize.STRING(128) }
 });
 
-UserModel.sync();
+export const init = async () => {
+    await UserModel.sync();
+    await sequelize.query(`alter table ${config.database.database}.users convert to character set utf8mb4 collate utf8mb4_bin`);
+    return true;
+}
+
+init().then((status) => {
+    if(status){
+        console.log("Connect Well");
+    } else {
+        console.log("Connect Failed");
+    }
+});
