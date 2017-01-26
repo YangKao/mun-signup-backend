@@ -9,7 +9,13 @@ export const app = new Koa();
 const router = new Router();
 
 router.put('/user', async (ctx, next) => {
-    ctx.body = await database.addUser(ctx.request.body);
+    try {
+        ctx.body = await database.addUser(ctx.request.body);
+    } catch(err) {
+        ctx.body = {
+            err: "Same Email"
+        };
+    }
     await next;
 })
 
@@ -76,13 +82,13 @@ router.post('/auth', async (ctx, next) => {
         }
     } else {
         ctx.body = {
-            err: "Wrong Password"
+            err: "Wrong Password Or Email"
         }
     }
     await next;
 })
 
 app.use(bodyParser());
-app.use(require("koa-cors")());
+app.use(require('koa-convert')(require("koa-cors")()));
 app.use(router.routes());
 app.use(router.allowedMethods());
