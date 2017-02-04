@@ -85,8 +85,10 @@ router.post('/auth', async (ctx, next) => {
     const req: { email: string, password: string } = ctx.request.body;
     const token = await auth.generateToken(req.email, req.password);
     if (token) {
+        const user = await database.findUserByEmail(req.email);
         ctx.body = {
-            token: token
+            token: token,
+            id: user.id
         }
         logger.info(`User (email=${ctx.request.body.email}) Log In Successful`)
     } else {
