@@ -1,7 +1,7 @@
 import * as winston from "winston"
 import {config} from './config'
 
-const tsFormat = () => (new Date()).toLocaleTimeString();
+const tsFormat = () => (new Date()).toLocaleTimeString()
 
 export const logger = new (winston.Logger)({
   transports: [
@@ -11,4 +11,4 @@ export const logger = new (winston.Logger)({
       level: 'info'
     })
   ]
-});
+})

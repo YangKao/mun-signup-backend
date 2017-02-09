@@ -2,7 +2,7 @@ import { app } from "../server"
 import * as database from "../user/database"
 import * as should from "should"
 import * as fetch from "isomorphic-fetch"
-import * as mysql from "mysql";
+import * as mysql from "mysql"
 import { config } from "../config"
 
 
@@ -12,14 +12,14 @@ const connection = mysql.createConnection({
     password: config.database.password,
     port: config.database.port,
     database: config.database.database
-});
+})
 
-app.listen(3000);
+app.listen(3000)
 
 describe("#server", () => {
-    let token:string = "";
+    let token:string = ""
     it("#add two user", async () => {
-        await database.init();
+        await database.init()
         const raw1 = await fetch("http://localhost:3000/user", {
             headers: {
                 'Accept': 'application/json',
@@ -37,8 +37,8 @@ describe("#server", () => {
                 idNum: "testIdNum",
                 school: "testSchool"
             })
-        });
-        const user1 = await raw1.json();
+        })
+        const user1 = await raw1.json()
 
         const raw2 = await fetch("http://localhost:3000/user", {
             headers: {
@@ -57,16 +57,16 @@ describe("#server", () => {
                 idNum: "testIdNum",
                 school: "测试中文学校"
             })
-        });
-        const user2 = await raw2.json();
+        })
+        const user2 = await raw2.json()
 
-        should(user1.id).equal(1);
-        should(user2.id).equal(2);
-        should(user2.school).equal("测试中文学校");
+        should(user1.id).equal(1)
+        should(user2.id).equal(2)
+        should(user2.school).equal("测试中文学校")
     })
 
     it("#add two same user", async () => {
-        await database.init();
+        await database.init()
         const raw1 = await fetch("http://localhost:3000/user", {
             headers: {
                 'Accept': 'application/json',
@@ -84,8 +84,8 @@ describe("#server", () => {
                 idNum: "testIdNum",
                 school: "testSchool"
             })
-        });
-        const user1 = await raw1.json();
+        })
+        const user1 = await raw1.json()
 
         const raw2 = await fetch("http://localhost:3000/user", {
             headers: {
@@ -104,9 +104,9 @@ describe("#server", () => {
                 idNum: "testIdNum",
                 school: "测试中文学校"
             })
-        });
-        const user2 = await raw2.json();
-        should(user2).has.keys("err");
+        })
+        const user2 = await raw2.json()
+        should(user2).has.keys("err")
     })
 
     it("#auth wrong password", async () => {
@@ -121,8 +121,8 @@ describe("#server", () => {
                 password:"wrongpassword"
             })
         })
-        const req = await raw.json();
-        should(req.err).equal("Wrong Password Or Email");
+        const req = await raw.json()
+        should(req.err).equal("Wrong Password Or Email")
     })
 
     it("#auth wrong email", async () => {
@@ -137,8 +137,8 @@ describe("#server", () => {
                 password:"wrongpassword"
             })
         })
-        const req = await raw.json();
-        should(req.err).equal("Wrong Password Or Email");
+        const req = await raw.json()
+        should(req.err).equal("Wrong Password Or Email")
     })
 
     it("#auth true user (id:1 password:\"testpassword\")", async () => {
@@ -153,9 +153,9 @@ describe("#server", () => {
                 password:"testpassword"
             })
         })
-        const req = await raw.json();
-        should(req).not.have.keys('err');
-        token = req.token;
+        const req = await raw.json()
+        should(req).not.have.keys('err')
+        token = req.token
     })
 
     it("#modify an user (id:1) email to test3@test.com Without Auth", async () => {
@@ -168,9 +168,9 @@ describe("#server", () => {
             body: JSON.stringify({
                 email: "test3@test.com"
             })
-        });
-        const user = await raw.json();
-        should(user).have.keys("err");
+        })
+        const user = await raw.json()
+        should(user).have.keys("err")
     })
 
     it("#modify an user (id:1) email to test3@test.com", async () => {
@@ -184,9 +184,9 @@ describe("#server", () => {
             body: JSON.stringify({
                 email: "test3@test.com"
             })
-        });
-        const user = await raw.json();
-        should(user.email).equal("test3@test.com");
+        })
+        const user = await raw.json()
+        should(user.email).equal("test3@test.com")
     })
 
     it("#get user (id=1) Without Auth", async () => {
@@ -196,9 +196,9 @@ describe("#server", () => {
                 'Content-Type': 'application/json'
             },
             method: "GET"
-        });
-        const user = await raw.json();
-        should(user).has.keys("err");
+        })
+        const user = await raw.json()
+        should(user).has.keys("err")
     })
 
     it("#get user (id=1)", async () => {
@@ -209,9 +209,9 @@ describe("#server", () => {
                 'Authorization': token
             },
             method: "GET"
-        });
-        const user = await raw.json();
-        should(user.email).equal("test3@test.com");
+        })
+        const user = await raw.json()
+        should(user.email).equal("test3@test.com")
     })
 
     it("#get all users Without Auth", async () => {
@@ -221,9 +221,9 @@ describe("#server", () => {
                 'Content-Type': 'application/json'
             },
             method: "GET"
-        });
-        const users = await raw.json();
-        should(users).has.keys("err");
+        })
+        const users = await raw.json()
+        should(users).has.keys("err")
     })
 
     it("#get all users", async () => {
@@ -234,10 +234,10 @@ describe("#server", () => {
                 'Authorization': config.adminPassword
             },
             method: "GET"
-        });
-        const users = await raw.json();
-        should(users[0].id).equal(1);
-        should(users[1].id).equal(2);
+        })
+        const users = await raw.json()
+        should(users[0].id).equal(1)
+        should(users[1].id).equal(2)
     })
 
     it("#delete a user by Id (2) Without Auth", async () => {
@@ -247,9 +247,9 @@ describe("#server", () => {
                 'Content-Type': 'application/json'
             },
             method: "DELETE"
-        });
-        const user = await raw.json();
-        should(user).has.keys("err");
+        })
+        const user = await raw.json()
+        should(user).has.keys("err")
     })
 
     it("#delete a user by Id (2)", async () => {
@@ -260,18 +260,18 @@ describe("#server", () => {
                 'Authorization': config.adminPassword
             },
             method: "DELETE"
-        });
-        const user = await raw.json();
-        should(user.id).equal(2);
+        })
+        const user = await raw.json()
+        should(user.id).equal(2)
     })
 
     it("#destroy the table", (done) => {
         connection.query('DROP TABLE users', function(error, results, fields) {
             if (error) {
-                throw error;
+                throw error
             }
-            done();
-        });
-        connection.end();
+            done()
+        })
+        connection.end()
     })
 })

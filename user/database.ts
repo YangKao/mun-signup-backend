@@ -1,59 +1,60 @@
-import { User, UserWithId, transformUserIns, UserModel, init } from './declare'
+import {User, UserWithId, transformUserIns, UserModel, init} from './declare'
 
-export { init };
+export {init};
 
 interface Error {
-    err: string
+    err : string
 }
 
-export const addUser = async (user: User): Promise<UserWithId> => {
-    const userIns: any = await UserModel.create(user);
-    return transformUserIns(userIns);
+export const addUser = async(user : User) : Promise < UserWithId > => {
+    const userIns : any = await UserModel.create(user)
+    return transformUserIns(userIns)
 }
 
-export const findUserByEmail = async (email: string): Promise<UserWithId> => {
-    const userIns: any = await UserModel.findOne({
+export const findUserByEmail = async(email : string) : Promise < UserWithId > => {
+    const userIns : any = await UserModel.findOne({
         where: {
             email: email
         }
-    });
-    return transformUserIns(userIns);
+    })
+    return transformUserIns(userIns)
 }
 
-export const findUserById = async (id: number): Promise<UserWithId> => {
-    const userIns: any = await UserModel.findById(id);
-    return transformUserIns(userIns);
+export const findUserById = async(id : number) : Promise < UserWithId > => {
+    const userIns : any = await UserModel.findById(id)
+    return transformUserIns(userIns)
 }
 
-export const deleteUserById = async (id: number): Promise<UserWithId> => {
-    const userIns: any = await UserModel.findById(id);
-    const preReturn = transformUserIns(userIns);
-    await userIns.destroy();
-    return preReturn;
+export const deleteUserById = async(id : number) : Promise < UserWithId > => {
+    const userIns : any = await UserModel.findById(id)
+    const preReturn = transformUserIns(userIns)
+    await userIns.destroy()
+    return preReturn
 }
 
-export const modUser = async (id: number, mod: any): Promise<UserWithId> => {
-    const userIns: any = await UserModel.findById(id);
+export const modUser = async(id : number, mod : any) : Promise < UserWithId > => {
+    const userIns : any = await UserModel.findById(id)
     for (let i in mod) {
-        userIns[i] = mod[i];
+        userIns[i] = mod[i]
     }
-    await userIns.save();
-    return transformUserIns(userIns);
+    await userIns.save()
+    return transformUserIns(userIns)
 }
 
-export const getUserList = async (): Promise<UserWithId[]> => {
-    const userInses: any[] = await UserModel.findAll();
-    return userInses.map(userIns => transformUserIns(userIns));
+export const getUserList = async() : Promise < UserWithId[] > => {
+    const userInses : any[] = await UserModel.findAll()
+    return userInses.map(userIns => transformUserIns(userIns))
 }
 
-export const auth = async (email: string, password: string): Promise<boolean> => {
-    const userIns: any = await UserModel.findOne({
+export const auth = async(email : string, password : string) : Promise < boolean > => {
+    const userIns : any = await UserModel.findOne({
         where: {
             email: email
         }
-    });
-    if (userIns)
-        return userIns.get("password") === password;
-    else
-        return false;
+    })
+    if (userIns) {
+        return userIns.get("password") === password
+    } else {
+        return false
+    }
 }

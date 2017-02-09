@@ -13,14 +13,14 @@ import { config } from "../config"
   Declare for TypeScript
 */
 export interface User {
-    intendCom: 1 | 2 | 3 | 4 | 5,
-    eatingHabit: string,
-    email: string,
-    myTel: string,
-    emerTel: string,
-    name: string,
-    password: string,
-    idNum: string,
+    intendCom: 1 | 2 | 3 | 4 | 5
+    eatingHabit: string
+    email: string
+    myTel: string
+    emerTel: string
+    name: string
+    password: string
+    idNum: string
     school: string
 }
 
@@ -65,7 +65,7 @@ const sequelize = new Sequelize(config.database.database, config.database.userna
         bigNumberStrings: true
     },
     logging: false
-});
+})
 export const UserModel = sequelize.define('user', {
     intendCom: { type: Sequelize.INTEGER(10) },
     eatingHabit: { type: Sequelize.STRING(512) },
@@ -76,18 +76,18 @@ export const UserModel = sequelize.define('user', {
     password: { type: Sequelize.STRING(128) },
     idNum: { type: Sequelize.STRING(128) },
     school: { type: Sequelize.STRING(128) }
-});
+})
 
 export const init = async () => {
-    await UserModel.sync();
-    await sequelize.query(`alter table ${config.database.database}.users convert to character set utf8mb4 collate utf8mb4_bin`);
-    return true;
+    await UserModel.sync()
+    await sequelize.query(`alter table ${config.database.database}.users convert to character set utf8mb4 collate utf8mb4_bin`)
+    return true
 }
 
 init().then((status) => {
     if(status){
-        logger.info("Connect Well");
+        logger.info("Connect Well")
     } else {
-        logger.error("Connect Failed");
+        logger.error("Connect Failed")
     }
-});
+})
