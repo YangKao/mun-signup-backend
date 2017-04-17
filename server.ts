@@ -19,7 +19,7 @@ router.put('/user', async (ctx, next) => {
             content: err
         }))
         ctx.body = {
-            err: "Same Email"
+            err: ["email"]
         }
     }
     await next
@@ -83,6 +83,7 @@ router.delete('/user/:id', async (ctx, next) => {
 //TODO: Handle Wrong Password
 router.post('/auth', async (ctx, next) => {
     const req: { email: string, password: string } = ctx.request.body
+
     const token = await auth.generateToken(req.email, req.password)
     if (token) {
         const user = await database.findUserByEmail(req.email)

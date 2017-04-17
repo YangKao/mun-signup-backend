@@ -1,7 +1,7 @@
 import { app } from "../server"
 import * as database from "../user/database"
 import * as should from "should"
-import * as fetch from "isomorphic-fetch"
+const fetch = require("isomorphic-fetch")
 import * as mysql from "mysql"
 import { config } from "../config"
 

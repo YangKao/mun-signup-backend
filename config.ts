@@ -6,9 +6,9 @@ export const config = {
   log: "serverLog.log",
   database: {
     username: "root",
-    password: "123456",
-    address: "192.168.99.100",
-    port: 32768,
+    password: "980613yka",
+    address: "localhost",
+    port: 3306,
     database: "SIGNUP_SYSTEM"
   }
 }
