@@ -20,7 +20,7 @@ describe("#server", () => {
     let token:string = ""
     it("#add two user", async () => {
         await database.init()
-        const raw1 = await fetch("http://localhost:3000/user", {
+        const raw1 = await fetch("http://localhost:3000/api/user", {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -40,7 +40,7 @@ describe("#server", () => {
         })
         const user1 = await raw1.json()
 
-        const raw2 = await fetch("http://localhost:3000/user", {
+        const raw2 = await fetch("http://localhost:3000/api/user", {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -67,7 +67,7 @@ describe("#server", () => {
 
     it("#add two same user", async () => {
         await database.init()
-        const raw1 = await fetch("http://localhost:3000/user", {
+        const raw1 = await fetch("http://localhost:3000/api/user", {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -87,7 +87,7 @@ describe("#server", () => {
         })
         const user1 = await raw1.json()
 
-        const raw2 = await fetch("http://localhost:3000/user", {
+        const raw2 = await fetch("http://localhost:3000/api/user", {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -110,7 +110,7 @@ describe("#server", () => {
     })
 
     it("#auth wrong password", async () => {
-        const raw = await fetch("http://localhost:3000/auth", {
+        const raw = await fetch("http://localhost:3000/api/auth", {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -126,7 +126,7 @@ describe("#server", () => {
     })
 
     it("#auth wrong email", async () => {
-        const raw = await fetch("http://localhost:3000/auth", {
+        const raw = await fetch("http://localhost:3000/api/auth", {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -142,7 +142,7 @@ describe("#server", () => {
     })
 
     it("#auth true user (id:1 password:\"testpassword\")", async () => {
-        const raw = await fetch("http://localhost:3000/auth", {
+        const raw = await fetch("http://localhost:3000/api/auth", {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -159,7 +159,7 @@ describe("#server", () => {
     })
 
     it("#modify an user (id:1) email to test3@test.com Without Auth", async () => {
-        const raw = await fetch("http://localhost:3000/user/1", {
+        const raw = await fetch("http://localhost:3000/api/user/1", {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -174,7 +174,7 @@ describe("#server", () => {
     })
 
     it("#modify an user (id:1) email to test3@test.com", async () => {
-        const raw = await fetch("http://localhost:3000/user/1", {
+        const raw = await fetch("http://localhost:3000/api/user/1", {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
@@ -190,7 +190,7 @@ describe("#server", () => {
     })
 
     it("#get user (id=1) Without Auth", async () => {
-        const raw = await fetch("http://localhost:3000/user/1", {
+        const raw = await fetch("http://localhost:3000/api/user/1", {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -202,7 +202,7 @@ describe("#server", () => {
     })
 
     it("#get user (id=1)", async () => {
-        const raw = await fetch("http://localhost:3000/user/1", {
+        const raw = await fetch("http://localhost:3000/api/user/1", {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
@@ -215,7 +215,7 @@ describe("#server", () => {
     })
 
     it("#get all users Without Auth", async () => {
-        const raw = await fetch("http://localhost:3000/user/all", {
+        const raw = await fetch("http://localhost:3000/api/user/all", {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -227,7 +227,7 @@ describe("#server", () => {
     })
 
     it("#get all users", async () => {
-        const raw = await fetch("http://localhost:3000/user/all", {
+        const raw = await fetch("http://localhost:3000/api/user/all", {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
@@ -241,7 +241,7 @@ describe("#server", () => {
     })
 
     it("#delete a user by Id (2) Without Auth", async () => {
-        const raw = await fetch("http://localhost:3000/user/2", {
+        const raw = await fetch("http://localhost:3000/api/user/2", {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -253,7 +253,7 @@ describe("#server", () => {
     })
 
     it("#delete a user by Id (2)", async () => {
-        const raw = await fetch("http://localhost:3000/user/2", {
+        const raw = await fetch("http://localhost:3000/api/user/2", {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',

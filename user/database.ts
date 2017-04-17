@@ -35,9 +35,7 @@ export const deleteUserById = async(id : number) : Promise < UserWithId > => {
 export const modUser = async(id : number, mod : any) : Promise < UserWithId > => {
     const userIns : any = await UserModel.findById(id)
     for (let i in mod) {
-        if(i !== 'id' && i !== 'name' && i !== 'email'){
             userIns[i] = mod[i]
-        }
     }
     await userIns.save()
     return transformUserIns(userIns)

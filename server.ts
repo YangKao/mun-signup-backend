@@ -9,7 +9,7 @@ import { config } from "./config"
 export const app = new Koa()
 const router = new Router()
 
-router.put('/user', async (ctx, next) => {
+router.put('/api/user', async (ctx, next) => {
     try {
         ctx.body = await database.addUser(ctx.request.body)
         logger.info(`User (id=${ctx.body.id}) Sign Up`)
@@ -25,7 +25,7 @@ router.put('/user', async (ctx, next) => {
     await next
 })
 
-router.post('/user/:id', async (ctx, next) => {
+router.post('/api/user/:id', async (ctx, next) => {
     const id = ctx.params["id"]
     const token = ctx.request.headers["authorization"]
     if (await auth.verifyToken(id, token)) {
@@ -40,7 +40,7 @@ router.post('/user/:id', async (ctx, next) => {
     await next
 })
 
-router.get('/user/all', async (ctx, next) => {
+router.get('/api/user/all', async (ctx, next) => {
     const token = ctx.request.headers["authorization"]
     if (token === config.adminPassword) {
         ctx.body = await database.getUserList()
@@ -53,7 +53,7 @@ router.get('/user/all', async (ctx, next) => {
     await next
 })
 
-router.get('/user/:id', async (ctx, next) => {
+router.get('/api/user/:id', async (ctx, next) => {
     const id = ctx.params["id"]
     const token = ctx.request.headers["authorization"]
     if (await auth.verifyToken(id, token)) {
@@ -67,7 +67,7 @@ router.get('/user/:id', async (ctx, next) => {
     await next
 })
 
-router.delete('/user/:id', async (ctx, next) => {
+router.delete('/api/user/:id', async (ctx, next) => {
     const token = ctx.request.headers["authorization"]
     if (token === config.adminPassword) {
         ctx.body = await database.deleteUserById(ctx.params["id"])
@@ -81,7 +81,7 @@ router.delete('/user/:id', async (ctx, next) => {
 })
 
 //TODO: Handle Wrong Password
-router.post('/auth', async (ctx, next) => {
+router.post('/api/auth', async (ctx, next) => {
     const req: { email: string, password: string } = ctx.request.body
 
     const token = await auth.generateToken(req.email, req.password)
